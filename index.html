@@ -140,7 +140,6 @@ header {
 }
 .sort-select:focus { border-color: var(--accent); }
 
-/* お気に入りフィルタボタン */
 .fav-filter-btn {
   display: flex; align-items: center; gap: .35rem;
   padding: .5rem .9rem;
@@ -150,11 +149,7 @@ header {
   transition: all .15s; white-space: nowrap;
 }
 .fav-filter-btn:hover { border-color: var(--star); color: var(--star); }
-.fav-filter-btn.active {
-  background: rgba(251,191,36,.1);
-  border-color: var(--star); color: var(--star);
-}
-.fav-filter-btn svg { flex-shrink: 0; }
+.fav-filter-btn.active { background: rgba(251,191,36,.1); border-color: var(--star); color: var(--star); }
 
 /* ══ grid ══ */
 .grid {
@@ -170,7 +165,7 @@ header {
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: var(--card-radius); overflow: hidden;
   display: flex; flex-direction: column;
-  color: inherit;
+  cursor: pointer;
   transition: border-color .2s, transform .2s, background .25s;
   animation: fadeUp .35s ease both;
 }
@@ -180,14 +175,12 @@ header {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* サムネ → クリックでリンク */
-.card-thumb-link {
-  display: block; text-decoration: none;
+.card-thumb {
   width: 100%; height: 160px; background: var(--bg3);
   display: flex; align-items: center; justify-content: center;
   overflow: hidden; flex-shrink: 0; transition: background .25s;
 }
-.card-thumb-link img { width: 100%; height: 100%; object-fit: cover; }
+.card-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .card-thumb-icon {
   font-size: 2.5rem; opacity: .2;
   width: 100%; height: 100%;
@@ -204,26 +197,11 @@ header {
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   margin-bottom: .5rem; opacity: .85;
 }
-
-/* 説明 展開/折りたたみ */
-.card-desc-wrap { font-size: .8rem; color: var(--muted2); line-height: 1.55; }
-.card-desc-text {
+.card-desc {
+  font-size: .8rem; color: var(--muted2); line-height: 1.55;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-  transition: none;
 }
-.card-desc-text.expanded {
-  display: block; -webkit-line-clamp: unset; overflow: visible;
-}
-.desc-toggle {
-  display: inline-block; margin-top: .25rem;
-  font-size: .75rem; color: var(--accent); cursor: pointer;
-  background: none; border: none; padding: 0;
-  font-family: 'DM Sans', sans-serif;
-  transition: opacity .15s;
-}
-.desc-toggle:hover { opacity: .7; }
 
-/* フッター */
 .card-footer {
   padding: .55rem 1rem; border-top: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
@@ -231,20 +209,15 @@ header {
 }
 .footer-left  { display: flex; align-items: center; gap: .4rem; }
 .footer-right { display: flex; align-items: center; gap: .3rem; }
-.card-open { font-size: .72rem; color: var(--muted); text-decoration: none; }
-.card-open:hover { color: var(--accent); }
 
-/* ⭐ お気に入りボタン */
 .fav-btn {
   background: none; border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   width: 28px; height: 28px; border-radius: 6px;
-  transition: background .15s, transform .1s;
-  color: var(--muted);
+  transition: background .15s, transform .1s; color: var(--muted);
 }
-.fav-btn:hover { background: rgba(251,191,36,.1); transform: scale(1.15); }
+.fav-btn:hover { background: rgba(251,191,36,.12); transform: scale(1.2); }
 .fav-btn.active { color: var(--star); }
-.fav-btn svg { pointer-events: none; }
 
 .del-btn {
   background: none; border: none; color: var(--muted); cursor: pointer;
@@ -252,6 +225,8 @@ header {
   font-family: 'DM Sans', sans-serif;
 }
 .del-btn:hover { color: var(--danger); background: rgba(248,113,113,.1); }
+
+.card-hint { font-size: .72rem; color: var(--muted); }
 
 /* ══ empty / loading ══ */
 .empty { grid-column: 1/-1; text-align: center; padding: 5rem 2rem; color: var(--muted); }
@@ -261,24 +236,27 @@ header {
 .spin { display: inline-block; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ══ modal ══ */
+/* ══ 投稿モーダル ══ */
 .overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.65);
-  backdrop-filter: blur(4px);
+  position: fixed; inset: 0; background: rgba(0,0,0,.7);
+  backdrop-filter: blur(6px);
   display: flex; align-items: center; justify-content: center;
-  z-index: 200; padding: 1rem; animation: fadeIn .15s ease;
+  z-index: 200; padding: 1rem;
 }
-@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.overlay.hide { display: none; }
+
 .modal {
   background: var(--bg2); border: 1px solid var(--border);
   border-radius: 18px; padding: 1.8rem; width: 100%; max-width: 460px;
   animation: slideUp .2s ease; transition: background .25s, border-color .25s;
+  max-height: 90vh; overflow-y: auto;
 }
 @keyframes slideUp {
   from { transform: translateY(20px); opacity:0; }
   to   { transform: translateY(0);    opacity:1; }
 }
 .modal-title { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 1.4rem; }
+
 .field { margin-bottom: 1rem; }
 .field label {
   display: block; font-size: .75rem; font-weight: 500; color: var(--muted2);
@@ -315,11 +293,103 @@ header {
 .btn-save:hover { background: #6d28d9; }
 .btn-save:disabled { opacity: .5; cursor: default; }
 
+/* ══ 詳細モーダル ══ */
+#detail-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.75);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 300; padding: 1rem;
+}
+#detail-overlay.hide { display: none; }
+
+.detail-modal {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 20px; width: 100%; max-width: 560px;
+  max-height: 90vh; overflow-y: auto;
+  animation: slideUp .2s ease;
+  transition: background .25s, border-color .25s;
+}
+
+.detail-thumb {
+  width: 100%; height: 220px;
+  background: var(--bg3);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; border-radius: 20px 20px 0 0;
+  flex-shrink: 0;
+}
+.detail-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.detail-thumb-icon { font-size: 4rem; opacity: .15; }
+
+.detail-body { padding: 1.5rem; }
+
+.detail-header {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem;
+  margin-bottom: 1rem;
+}
+.detail-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.25rem; font-weight: 700; line-height: 1.3;
+  flex: 1;
+}
+.detail-fav-btn {
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  transition: background .15s, transform .1s; color: var(--muted);
+  margin-top: .1rem;
+}
+.detail-fav-btn:hover { background: rgba(251,191,36,.12); transform: scale(1.15); }
+.detail-fav-btn.active { color: var(--star); }
+
+.detail-url {
+  display: inline-flex; align-items: center; gap: .3rem;
+  font-size: .82rem; color: var(--accent);
+  text-decoration: none; margin-bottom: 1.2rem;
+  word-break: break-all; opacity: .9;
+}
+.detail-url:hover { opacity: 1; text-decoration: underline; }
+
+.detail-desc {
+  font-size: .9rem; color: var(--muted2); line-height: 1.75;
+  white-space: pre-wrap; margin-bottom: 1.4rem;
+  border-top: 1px solid var(--border); padding-top: 1rem;
+}
+
+.detail-actions {
+  display: flex; gap: .75rem; padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.btn-open {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: .4rem;
+  padding: .65rem 1rem;
+  background: var(--accent-dark); color: #fff;
+  border: none; border-radius: 10px; text-decoration: none;
+  font-family: 'DM Sans', sans-serif; font-size: .875rem; font-weight: 600;
+  transition: background .15s;
+}
+.btn-open:hover { background: #6d28d9; }
+.btn-close-detail {
+  padding: .65rem 1.2rem;
+  background: none; border: 1px solid var(--border); border-radius: 10px;
+  cursor: pointer; color: var(--muted2);
+  font-family: 'DM Sans', sans-serif; font-size: .875rem;
+  transition: border-color .15s;
+}
+.btn-close-detail:hover { border-color: var(--muted); }
+.btn-del-detail {
+  padding: .65rem 1rem;
+  background: none; border: 1px solid rgba(248,113,113,.3); border-radius: 10px;
+  cursor: pointer; color: var(--danger);
+  font-family: 'DM Sans', sans-serif; font-size: .875rem;
+  transition: background .15s, border-color .15s;
+}
+.btn-del-detail:hover { background: rgba(248,113,113,.1); border-color: var(--danger); }
+
 /* ══ toast ══ */
 .toast {
   position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
   background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-  padding: .65rem 1.4rem; font-size: .85rem; z-index: 300; white-space: nowrap;
+  padding: .65rem 1.4rem; font-size: .85rem; z-index: 400; white-space: nowrap;
   animation: toastIn .25s ease;
 }
 @keyframes toastIn {
@@ -332,6 +402,8 @@ header {
   .uid-badge { display: none; }
   .toolbar { padding: .8rem 1rem .2rem; }
   .grid { padding: 1rem 1rem 3rem; gap: 1rem; }
+  .detail-thumb { height: 180px; }
+  .detail-title { font-size: 1.1rem; }
 }
 </style>
 </head>
@@ -367,15 +439,12 @@ header {
     </span>
     <input type="search" id="search" placeholder="タイトル・URLで検索..." oninput="renderFiltered()" />
   </div>
-
-  <!-- お気に入りフィルタ -->
   <button class="fav-filter-btn" id="fav-filter-btn" onclick="toggleFavFilter()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
     </svg>
     お気に入りだけ
   </button>
-
   <select class="sort-select" id="sort-select" onchange="renderFiltered()">
     <option value="date-desc">投稿日 新しい順</option>
     <option value="date-asc">投稿日 古い順</option>
@@ -388,8 +457,8 @@ header {
   <div class="loading"><span class="spin">◌</span>&nbsp; ログイン中...</div>
 </div>
 
-<!-- modal -->
-<div class="overlay" id="modal" style="display:none" onclick="overlayClick(event)">
+<!-- 投稿モーダル -->
+<div class="overlay hide" id="modal" onclick="overlayClick(event,'modal')">
   <div class="modal">
     <div class="modal-title">リンクを追加</div>
     <div class="field">
@@ -419,6 +488,42 @@ header {
   </div>
 </div>
 
+<!-- 詳細モーダル -->
+<div id="detail-overlay" class="hide" onclick="overlayClick(event,'detail-overlay')">
+  <div class="detail-modal">
+    <div class="detail-thumb" id="detail-thumb"></div>
+    <div class="detail-body">
+      <div class="detail-header">
+        <div class="detail-title" id="detail-title"></div>
+        <button class="detail-fav-btn" id="detail-fav-btn" onclick="toggleFavoriteDetail()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </button>
+      </div>
+      <a class="detail-url" id="detail-url" target="_blank" rel="noopener noreferrer">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+        <span id="detail-url-text"></span>
+      </a>
+      <div class="detail-desc" id="detail-desc" style="display:none"></div>
+      <div class="detail-actions">
+        <a class="btn-open" id="detail-open" href="#" target="_blank" rel="noopener noreferrer">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          サイトを開く
+        </a>
+        <button class="btn-close-detail" onclick="closeDetail()">閉じる</button>
+        <button class="btn-del-detail" id="detail-del-btn" style="display:none" onclick="deleteFromDetail()">削除</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -435,11 +540,12 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db   = firebase.firestore();
 
-let allCards    = [];
-let imgBase64   = '';
-let currentUid  = null;
-let favorites   = new Set();   // linkId のセット
-let favOnly     = false;       // お気に入りフィルタ ON/OFF
+let allCards       = [];
+let imgBase64      = '';
+let currentUid     = null;
+let favorites      = new Set();
+let favOnly        = false;
+let detailCardId   = null;  // 詳細表示中のカードID
 
 /* ══ 匿名ログイン ══ */
 auth.onAuthStateChanged(async user => {
@@ -469,15 +575,110 @@ function toggleTheme() {
   document.getElementById('theme-icon-light').style.display = next === 'light' ? '' : 'none';
 }
 
-/* ══ modal ══ */
-function openModal() { document.getElementById('modal').style.display = 'flex'; }
+/* ══ 投稿モーダル ══ */
+function openModal() { document.getElementById('modal').classList.remove('hide'); }
 function closeModal() {
-  document.getElementById('modal').style.display = 'none';
+  document.getElementById('modal').classList.add('hide');
   ['inp-url','inp-title','inp-desc','inp-file'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('thumb-preview').style.display = 'none';
   imgBase64 = '';
 }
-function overlayClick(e) { if (e.target.classList.contains('overlay')) closeModal(); }
+function overlayClick(e, id) {
+  if (e.target === document.getElementById(id)) {
+    if (id === 'modal') closeModal();
+    else closeDetail();
+  }
+}
+
+/* ══ 詳細モーダル ══ */
+function openDetail(card) {
+  detailCardId = card.id;
+  const isFav  = favorites.has(card.id);
+  const isOwn  = card.uid && card.uid === currentUid;
+
+  // サムネ
+  const thumbEl = document.getElementById('detail-thumb');
+  thumbEl.innerHTML = card.thumbUrl
+    ? `<img src="${escHtml(card.thumbUrl)}" alt=""/>`
+    : `<div class="detail-thumb-icon">🔗</div>`;
+
+  document.getElementById('detail-title').textContent    = card.title || '無題';
+  document.getElementById('detail-url').href             = card.url;
+  document.getElementById('detail-url-text').textContent = card.url;
+  document.getElementById('detail-open').href            = card.url;
+
+  // 説明
+  const descEl = document.getElementById('detail-desc');
+  if (card.desc) {
+    descEl.textContent = card.desc;
+    descEl.style.display = '';
+  } else {
+    descEl.style.display = 'none';
+  }
+
+  // お気に入りボタン
+  updateDetailFavBtn(isFav);
+
+  // 削除ボタン（自分のみ）
+  document.getElementById('detail-del-btn').style.display = isOwn ? '' : 'none';
+
+  document.getElementById('detail-overlay').classList.remove('hide');
+}
+
+function closeDetail() {
+  document.getElementById('detail-overlay').classList.add('hide');
+  detailCardId = null;
+}
+
+function updateDetailFavBtn(isFav) {
+  const btn = document.getElementById('detail-fav-btn');
+  btn.classList.toggle('active', isFav);
+  btn.querySelector('svg').setAttribute('fill', isFav ? 'var(--star)' : 'none');
+  btn.querySelector('svg').setAttribute('stroke', isFav ? 'var(--star)' : 'currentColor');
+  btn.title = isFav ? 'お気に入りから外す' : 'お気に入りに追加';
+}
+
+/* ══ 詳細画面からお気に入りトグル ══ */
+async function toggleFavoriteDetail() {
+  if (!detailCardId) return;
+  await toggleFav(detailCardId);
+  updateDetailFavBtn(favorites.has(detailCardId));
+  renderFiltered();
+}
+
+/* ══ お気に入り共通ロジック ══ */
+async function loadFavorites() {
+  try {
+    const snap = await db.collection('users').doc(currentUid).collection('favorites').get();
+    favorites = new Set(snap.docs.map(d => d.id));
+  } catch(e) { favorites = new Set(); }
+}
+
+async function toggleFav(id) {
+  if (!currentUid) return;
+  const ref = db.collection('users').doc(currentUid).collection('favorites').doc(id);
+  if (favorites.has(id)) {
+    favorites.delete(id);
+    await ref.delete();
+    showToast('⭐ お気に入りから外したよ');
+  } else {
+    favorites.add(id);
+    await ref.set({ addedAt: firebase.firestore.FieldValue.serverTimestamp() });
+    showToast('⭐ お気に入りに追加したよ！');
+  }
+}
+
+async function toggleFavorite(id, e) {
+  e.stopPropagation();
+  await toggleFav(id);
+  renderFiltered();
+}
+
+function toggleFavFilter() {
+  favOnly = !favOnly;
+  document.getElementById('fav-filter-btn').classList.toggle('active', favOnly);
+  renderFiltered();
+}
 
 /* ══ 画像圧縮 ══ */
 function previewImg(e) {
@@ -521,118 +722,30 @@ async function saveLink() {
   btn.textContent = '保存する'; btn.disabled = false;
 }
 
-/* ══ delete (自分のみ) ══ */
-async function deleteLink(id, e) {
-  e.preventDefault(); e.stopPropagation();
-  if (!confirm('このリンクを削除する？')) return;
+/* ══ delete ══ */
+async function doDelete(id) {
+  if (!confirm('このリンクを削除する？')) return false;
   try {
     await db.collection('links').doc(id).delete();
-    // お気に入りからも消す
     if (favorites.has(id)) {
       favorites.delete(id);
       await db.collection('users').doc(currentUid).collection('favorites').doc(id).delete();
     }
-    showToast('削除したよ'); loadLinks();
-  }
-  catch(err) { showToast('削除エラー: ' + err.message); }
+    showToast('削除したよ');
+    return true;
+  } catch(err) { showToast('削除エラー: ' + err.message); return false; }
 }
 
-/* ══ お気に入り読み込み ══ */
-async function loadFavorites() {
-  try {
-    const snap = await db.collection('users').doc(currentUid).collection('favorites').get();
-    favorites = new Set(snap.docs.map(d => d.id));
-  } catch(e) { favorites = new Set(); }
+async function deleteLink(id, e) {
+  e.stopPropagation();
+  const ok = await doDelete(id);
+  if (ok) loadLinks();
 }
 
-/* ══ お気に入りトグル ══ */
-async function toggleFavorite(id, e) {
-  e.preventDefault(); e.stopPropagation();
-  if (!currentUid) return;
-  const ref = db.collection('users').doc(currentUid).collection('favorites').doc(id);
-  if (favorites.has(id)) {
-    favorites.delete(id);
-    await ref.delete();
-    showToast('⭐ お気に入りから外したよ');
-  } else {
-    favorites.add(id);
-    await ref.set({ addedAt: firebase.firestore.FieldValue.serverTimestamp() });
-    showToast('⭐ お気に入りに追加したよ！');
-  }
-  renderFiltered();
-}
-
-/* ══ お気に入りフィルタ切替 ══ */
-function toggleFavFilter() {
-  favOnly = !favOnly;
-  const btn = document.getElementById('fav-filter-btn');
-  btn.classList.toggle('active', favOnly);
-  renderFiltered();
-}
-
-/* ══ 説明展開 ══ */
-function toggleDesc(id, e) {
-  e.preventDefault(); e.stopPropagation();
-  const textEl   = document.getElementById('desc-text-' + id);
-  const toggleEl = document.getElementById('desc-toggle-' + id);
-  if (!textEl) return;
-  const expanded = textEl.classList.toggle('expanded');
-  toggleEl.textContent = expanded ? '折りたたむ ▲' : '詳細を見る ▼';
-}
-
-/* ══ render card ══ */
-function renderCard(data, id) {
-  const isFav = favorites.has(id);
-  const isOwn = data.uid && data.uid === currentUid;
-
-  const thumb = data.thumbUrl
-    ? `<a class="card-thumb-link" href="${escHtml(data.url)}" target="_blank" rel="noopener noreferrer">
-         <img src="${escHtml(data.thumbUrl)}" alt=""/>
-       </a>`
-    : `<a class="card-thumb-link" href="${escHtml(data.url)}" target="_blank" rel="noopener noreferrer">
-         <div class="card-thumb-icon">🔗</div>
-       </a>`;
-
-  // 説明が長い(50文字超)かどうか判定
-  const desc = data.desc || '';
-  let descHtml = '';
-  if (desc) {
-    const needToggle = desc.length > 50;
-    descHtml = `
-      <div class="card-desc-wrap">
-        <div class="card-desc-text" id="desc-text-${id}">${escHtml(desc)}</div>
-        ${needToggle ? `<button class="desc-toggle" id="desc-toggle-${id}" onclick="toggleDesc('${id}',event)">詳細を見る ▼</button>` : ''}
-      </div>`;
-  }
-
-  const favIcon = isFav
-    ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="var(--star)" stroke="var(--star)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
-    : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
-
-  const delBtn = isOwn
-    ? `<button class="del-btn" onclick="deleteLink('${id}',event)">削除</button>`
-    : '';
-
-  return `
-  <div class="card">
-    ${thumb}
-    <div class="card-body">
-      <div class="card-title">${escHtml(data.title||'無題')}</div>
-      <div class="card-url">${escHtml(data.url)}</div>
-      ${descHtml}
-    </div>
-    <div class="card-footer">
-      <div class="footer-left">
-        <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFavorite('${id}',event)" title="${isFav ? 'お気に入りから外す' : 'お気に入りに追加'}">
-          ${favIcon}
-        </button>
-        <a class="card-open" href="${escHtml(data.url)}" target="_blank" rel="noopener noreferrer">開く ↗</a>
-      </div>
-      <div class="footer-right">
-        ${delBtn}
-      </div>
-    </div>
-  </div>`;
+async function deleteFromDetail() {
+  const id = detailCardId;
+  const ok = await doDelete(id);
+  if (ok) { closeDetail(); loadLinks(); }
 }
 
 /* ══ load ══ */
@@ -648,51 +761,78 @@ async function loadLinks() {
   }
 }
 
+/* ══ render card ══ */
+function starSvg(filled) {
+  return filled
+    ? `<svg width="15" height="15" viewBox="0 0 24 24" fill="var(--star)" stroke="var(--star)" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`
+    : `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`;
+}
+
+function renderCard(data, id) {
+  const isFav = favorites.has(id);
+  const isOwn = data.uid && data.uid === currentUid;
+  const thumb = data.thumbUrl
+    ? `<div class="card-thumb"><img src="${escHtml(data.thumbUrl)}" alt=""/></div>`
+    : `<div class="card-thumb"><div class="card-thumb-icon">🔗</div></div>`;
+  const delBtn = isOwn ? `<button class="del-btn" onclick="deleteLink('${id}',event)">削除</button>` : '';
+
+  return `
+  <div class="card" onclick="openDetail(allCards.find(c=>c.id==='${id}'))">
+    ${thumb}
+    <div class="card-body">
+      <div class="card-title">${escHtml(data.title||'無題')}</div>
+      <div class="card-url">${escHtml(data.url)}</div>
+      ${data.desc ? `<div class="card-desc">${escHtml(data.desc)}</div>` : ''}
+    </div>
+    <div class="card-footer">
+      <div class="footer-left">
+        <button class="fav-btn ${isFav?'active':''}" onclick="toggleFavorite('${id}',event)" title="${isFav?'お気に入りから外す':'お気に入りに追加'}">
+          ${starSvg(isFav)}
+        </button>
+        <span class="card-hint">タップで詳細</span>
+      </div>
+      <div class="footer-right">${delBtn}</div>
+    </div>
+  </div>`;
+}
+
 /* ══ filter + sort + render ══ */
 function renderFiltered() {
   const q    = document.getElementById('search').value.toLowerCase();
   const sort = document.getElementById('sort-select').value;
-
-  let list = [...allCards];
-
-  // お気に入りフィルタ
+  let list   = [...allCards];
   if (favOnly) list = list.filter(c => favorites.has(c.id));
-
-  // 検索
   if (q) list = list.filter(c =>
     (c.title||'').toLowerCase().includes(q) ||
     (c.url  ||'').toLowerCase().includes(q) ||
     (c.desc ||'').toLowerCase().includes(q)
   );
-
-  // 並び替え
-  list.sort((a, b) => {
-    if (sort === 'date-desc') return (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0);
-    if (sort === 'date-asc')  return (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0);
-    if (sort === 'abc-asc')   return (a.title||'').localeCompare(b.title||'', 'ja');
-    return (b.title||'').localeCompare(a.title||'', 'ja');
+  list.sort((a,b) => {
+    if (sort==='date-desc') return (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0);
+    if (sort==='date-asc')  return (a.createdAt?.seconds||0)-(b.createdAt?.seconds||0);
+    if (sort==='abc-asc')   return (a.title||'').localeCompare(b.title||'','ja');
+    return (b.title||'').localeCompare(a.title||'','ja');
   });
-
   const grid = document.getElementById('grid');
-  if (list.length === 0) {
-    const msg = favOnly && !q
+  if (list.length===0) {
+    const msg = favOnly&&!q
       ? 'お気に入りはまだないよ<br>カードの ⭐ から追加してみて！'
-      : q ? '「'+escHtml(q)+'」に一致するリンクはないよ'
+      : q ? `「${escHtml(q)}」に一致するリンクはないよ`
           : 'まだリンクがないよ<br>「リンク追加」から追加してみて！';
-    grid.innerHTML = `<div class="empty"><div class="empty-icon">${favOnly ? '⭐' : '✦'}</div><p>${msg}</p></div>`;
+    grid.innerHTML = `<div class="empty"><div class="empty-icon">${favOnly?'⭐':'✦'}</div><p>${msg}</p></div>`;
     return;
   }
   grid.innerHTML = list.map((c,i) =>
-    renderCard(c, c.id).replace('animation: fadeUp', `animation-delay:${i*.04}s;animation:fadeUp`)
+    renderCard(c,c.id).replace('animation: fadeUp',`animation-delay:${i*.04}s;animation:fadeUp`)
   ).join('');
 }
 
 /* ══ toast ══ */
 function showToast(msg) {
   const t = document.createElement('div');
-  t.className = 'toast'; t.textContent = msg;
+  t.className='toast'; t.textContent=msg;
   document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2500);
+  setTimeout(()=>t.remove(), 2500);
 }
 
 /* ══ escape ══ */
@@ -700,7 +840,12 @@ function escHtml(s='') {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key==='Escape') {
+    if (!document.getElementById('detail-overlay').classList.contains('hide')) closeDetail();
+    else closeModal();
+  }
+});
 </script>
 </body>
 </html>
